@@ -7,6 +7,7 @@ import 'package:takwira_app/views/cards/game_card.dart';
 import 'package:takwira_app/views/create/create_game.dart';
 import 'package:takwira_app/views/games/game_details.dart';
 import 'package:http/http.dart' as http;
+import 'package:takwira_app/views/search.dart';
 
 class Games extends StatefulWidget {
   const Games({Key? key});
@@ -30,7 +31,8 @@ class _GamesState extends State<Games> {
     var username = prefs.getString('username') ?? '';
     if (username.isNotEmpty) {
       try {
-        final response = await http.get(Uri.parse('https://takwira.me/api/games?username=$username'));
+        final response = await http
+            .get(Uri.parse('https://takwira.me/api/games?username=$username'));
         if (response.statusCode == 200) {
           final gamesResponse = jsonDecode(response.body);
           setState(() {
@@ -105,7 +107,14 @@ class _GamesState extends State<Games> {
           Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Search(),
+                    ),
+                  );
+                },
                 icon: Image.asset('assets/images/search.png'),
               ),
               const SizedBox(width: 5),
@@ -131,7 +140,8 @@ class _GamesState extends State<Games> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => GameDetails(gameDataS: game),
+                                builder: (context) =>
+                                    GameDetails(gameDataS: game),
                               ),
                             );
                           },

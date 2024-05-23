@@ -199,7 +199,9 @@ class _ChatInterfaceState extends State<ChatInterface> {
                       children: [
                         if (fileUrl != null && isImage) ...[
                           Container(
-                            margin: !isCurrentUser ? EdgeInsets.only(left: 18.0, top: 8.0) : EdgeInsets.only(right: 18.0, top: 8.0),
+                            margin: !isCurrentUser
+                                ? EdgeInsets.only(left: 18.0, top: 8.0)
+                                : EdgeInsets.only(right: 18.0, top: 8.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image.network(
@@ -210,7 +212,7 @@ class _ChatInterfaceState extends State<ChatInterface> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 8), 
+                          SizedBox(height: 8),
                         ],
                         BubbleSpecialThree(
                           isSender: isCurrentUser,
@@ -230,7 +232,7 @@ class _ChatInterfaceState extends State<ChatInterface> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: width(10)),
+                padding: EdgeInsets.symmetric(vertical: width(10)),
                 child: Container(
                   color: Colors.transparent,
                   height: width(50),

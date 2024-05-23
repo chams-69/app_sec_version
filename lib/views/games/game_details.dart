@@ -25,7 +25,7 @@ final sentProvider = StateNotifierProvider<Sent, bool>(((ref) {
 class GameDetails extends ConsumerStatefulWidget {
   final dynamic? gameDataS;
   const GameDetails({Key? key, required this.gameDataS});
-@override
+  @override
   ConsumerState<GameDetails> createState() => _GameDetailsState();
 }
 
@@ -37,14 +37,12 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
   }
 
   Widget build(BuildContext context) {
-    
     final gameData = ref.watch(gameDataProvider);
     final fieldData = ref.watch(fieldDataProvider);
     final playerData = ref.watch(userDataProvider);
     final sent = ref.watch(sentProvider);
     bool member = true;
     dynamic? gameDataS = widget.gameDataS;
-    
 
     double a = 0;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -209,7 +207,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          GameRequests(game : gameDataS),
+                                          GameRequests(game: gameDataS),
                                     ),
                                   );
                                 },
@@ -292,7 +290,9 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                               padding: EdgeInsets.only(left: width(2)),
                               child: SizedBox(
                                 width: width(388),
-                                height: gameDataS['game']['isGameOwner'] == true ? width(200) : width(226),
+                                height: gameDataS['game']['isGameOwner'] == true
+                                    ? width(200)
+                                    : width(226),
                                 child: Image.asset(
                                   'assets/images/gameBg.png',
                                   fit: BoxFit.cover,
@@ -371,7 +371,9 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                       Image.asset(
                         'assets/images/linear3.png',
                         width: screenWidth,
-                        height: gameDataS['game']['isGameOwner'] == false ? width(236) : width(200),
+                        height: gameDataS['game']['isGameOwner'] == false
+                            ? width(236)
+                            : width(200),
                         fit: BoxFit.cover,
                       ),
                       Column(
@@ -388,7 +390,9 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                             ),
                           ),
                           SizedBox(
-                              height: gameDataS['game']['isGameOwner'] == true ? width(15) : width(8)),
+                              height: gameDataS['game']['isGameOwner'] == true
+                                  ? width(15)
+                                  : width(8)),
                           Text(
                             DateFormat('d MMMM, yyyy').format(date),
                             style: TextStyle(
@@ -541,7 +545,8 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Announcement(gameid : gameDataS['game']['id']),
+                                  builder: (context) => Announcement(
+                                      gameid: gameDataS['game']['id']),
                                 ),
                               );
                             },
@@ -859,9 +864,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                 : sent == false
                     ? const Color(0xff599068)
                     : const Color(0xFF807E73)
-            : gameDataS['game']['isGameOwner'] == false
-                ? const Color(0xff7E3C3C)
-                : const Color(0xff599068),
+            : const Color(0xff7E3C3C),
         child: TextButton(
           onPressed: () {
             gameDataS['game']['isGameOwner'] == true

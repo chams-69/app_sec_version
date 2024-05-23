@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:takwira_app/views/cards/team_card.dart';
 import 'package:takwira_app/views/create/create_team.dart';
+import 'package:takwira_app/views/search.dart';
 import 'package:takwira_app/views/teams/team_details.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,32 +13,36 @@ class Teams extends StatefulWidget {
   final bool? isOpponent;
   final dynamic? opponentTeams;
   final dynamic? joinableTeams;
-  const Teams({super.key, this.isJoinables, this.isOpponent, this.opponentTeams, this.joinableTeams});
+  const Teams(
+      {super.key,
+      this.isJoinables,
+      this.isOpponent,
+      this.opponentTeams,
+      this.joinableTeams});
   @override
   State<Teams> createState() => _TeamsState();
 }
 
-class _TeamsState extends State<Teams>{
+class _TeamsState extends State<Teams> {
   List<dynamic>? teams;
-  bool isLoading = true;  
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    if(widget.isJoinables == true || widget.isOpponent == true ){
-      if(widget.isOpponent == true){
+    if (widget.isJoinables == true || widget.isOpponent == true) {
+      if (widget.isOpponent == true) {
         setState(() {
           teams = widget.opponentTeams;
-          isLoading = false; 
+          isLoading = false;
         });
-      }else{
-          setState(() {
-            teams = widget.joinableTeams;
-            isLoading = false; 
-          });
-          
+      } else {
+        setState(() {
+          teams = widget.joinableTeams;
+          isLoading = false;
+        });
       }
-    }else{
+    } else {
       fetchTeamsData();
     }
   }
@@ -47,23 +52,24 @@ class _TeamsState extends State<Teams>{
     var username = prefs.getString('username') ?? '';
     if (username.isNotEmpty) {
       try {
-        final response = await http.get(Uri.parse('https://takwira.me/api/teams?username=$username'));
+        final response = await http
+            .get(Uri.parse('https://takwira.me/api/teams?username=$username'));
         if (response.statusCode == 200) {
           final fieldsResponse = jsonDecode(response.body);
           setState(() {
             teams = fieldsResponse['teams'];
-            isLoading = false; 
+            isLoading = false;
           });
         } else {
           print('Failed to fetch user data: ${response.statusCode}');
           setState(() {
-            isLoading = false; 
+            isLoading = false;
           });
         }
       } catch (e) {
         print('Failed to fetch user data: $e');
         setState(() {
-          isLoading = false; 
+          isLoading = false;
         });
       }
     }
@@ -125,7 +131,14 @@ class _TeamsState extends State<Teams>{
             Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Search(),
+                      ),
+                    );
+                  },
                   icon: Image.asset('assets/images/search.png'),
                 ),
                 const SizedBox(width: 5),
@@ -151,11 +164,12 @@ class _TeamsState extends State<Teams>{
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TeamDetails(team : team),
+                                  builder: (context) => TeamDetails(team: team),
                                 ),
                               );
                             },
-                            child: Ink(child: TeamCard(team: true, teamData : team)),
+                            child: Ink(
+                                child: TeamCard(team: true, teamData: team)),
                           ),
                           SizedBox(height: width(15)),
                         ],

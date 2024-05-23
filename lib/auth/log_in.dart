@@ -22,9 +22,9 @@ class _LogInState extends State<LogIn> {
   final TextEditingController passwordController = TextEditingController();
   String errorMessage = '';
 
-  Future<void> signIn(BuildContext context) async {
-    final String email = usernameController.text;
-    final String password = passwordController.text;
+  Future<void> signIn(BuildContext context, String? Pass, String? Email) async {
+    final String? email = Email;
+    final String? password = Pass;
 
     final Uri url = Uri.parse('https://takwira.me/login');
     final http.Response response = await http.post(
@@ -211,16 +211,8 @@ class _LogInState extends State<LogIn> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Navigation(
-                                index: 2,
-                              ),
-                            ),
-                          );
+                          signIn(context, _password, _logIn);
                         }
-                        signIn(context);
                       },
                       child: Padding(
                         padding: EdgeInsets.all(width(13)),

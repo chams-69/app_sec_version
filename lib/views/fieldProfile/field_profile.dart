@@ -42,7 +42,7 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
     final field = widget.field?['field'];
     final fieldData = ref.watch(fieldDataProvider);
     final loved = ref.watch(loveProvider);
-
+    print(field);
     double a = 0;
     double screenWidth = MediaQuery.of(context).size.width;
     double width(double width) {
@@ -73,7 +73,7 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
         title: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
-            fieldData.fieldName,
+            field['name'],
             style: const TextStyle(
               color: Color(0xFFF1EED0),
               fontSize: 16,
@@ -97,10 +97,6 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
                   width: width(22),
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset('assets/images/share.png'),
-              ),
               const SizedBox(width: 5),
             ],
           )
@@ -113,7 +109,8 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
             return [
               SliverList(
                 delegate: SliverChildListDelegate([
-                  FieldProfileHeader(field : field,
+                  FieldProfileHeader(
+                    field: field,
                     onBookNowPressed: () {
                       setState(() {
                         selectedIndex = 2;
@@ -181,7 +178,7 @@ class _FieldProfileState extends ConsumerState<FieldProfile>
               ),
               Expanded(
                   child: TabBarView(controller: _tabController, children: [
-                FieldDetails(field : field),
+                FieldDetails(field: field),
                 FieldPosts(),
                 FieldBooking(),
               ]))

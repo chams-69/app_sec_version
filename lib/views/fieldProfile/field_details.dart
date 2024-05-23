@@ -17,6 +17,32 @@ class FieldDetails extends ConsumerWidget {
       return screenWidth * a;
     }
 
+    List<Map<String, dynamic>> services = [
+      {"service": "Parking", "icon": "assets/images/park.png"},
+      {"service": "Cafeteria", "icon": "assets/images/coffe2.png"},
+      {"service": "Toilets", "icon": "assets/images/wc2.png"},
+      {"service": "Water", "icon": "assets/images/water2.png"},
+    ];
+
+    List<List<Map<String, dynamic>>> matrixServices = [];
+    int rows = (services.length / 2).ceil();
+    int cols = 2;
+    int serviceIndex = 0;
+
+    for (int i = 0; i < rows; i++) {
+      List<Map<String, dynamic>> row = [];
+      for (int j = 0; j < cols; j++) {
+        if (serviceIndex < services.length) {
+          row.add(services[serviceIndex]);
+          serviceIndex++;
+        } else {
+          // If there are no more services, add an empty entry
+          row.add({"service": "", "icon": ""});
+        }
+      }
+      matrixServices.add(row);
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -35,7 +61,7 @@ class FieldDetails extends ConsumerWidget {
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        fieldData.adress,
+                        'Route Tunis Km 3.5',
                         style: TextStyle(
                           color: const Color(0xFF5C7E6C),
                           fontSize: width(12),
@@ -179,89 +205,50 @@ class FieldDetails extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(height: width(24)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/park.png',
-                          width: width(14),
-                          height: width(14),
-                        ),
-                        SizedBox(width: width(5)),
-                        Text(
-                          'Parking',
-                          style: TextStyle(
-                            color: const Color(0xFFF1EED0),
-                            fontSize: width(12),
-                            fontWeight: FontWeight.normal,
+                Column(
+                  children: List.generate(
+                    (services.length / 2).ceil(),
+                    (rowIndex) {
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(
+                              2,
+                              (colIndex) {
+                                int serviceIndex = rowIndex * 2 + colIndex;
+                                if (serviceIndex < services.length) {
+                                  return Row(
+                                    children: [
+                                      Image.asset(
+                                        services[serviceIndex]['icon'],
+                                        width: width(14),
+                                        height: width(14),
+                                      ),
+                                      SizedBox(width: width(5)),
+                                      Text(
+                                        services[serviceIndex]['service'],
+                                        style: TextStyle(
+                                          color: const Color(0xFFF1EED0),
+                                          fontSize: width(12),
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  // If there are no more services, return an empty SizedBox
+                                  return SizedBox();
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/wc2.png',
-                          width: width(16),
-                          height: width(16),
-                        ),
-                        SizedBox(width: width(5)),
-                        Text(
-                          'Toilets',
-                          style: TextStyle(
-                            color: const Color(0xFFF1EED0),
-                            fontSize: width(12),
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: width(5)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/coffe2.png',
-                          width: width(14),
-                          height: width(14),
-                        ),
-                        SizedBox(width: width(5)),
-                        Text(
-                          'Cafeteria',
-                          style: TextStyle(
-                            color: const Color(0xFFF1EED0),
-                            fontSize: width(12),
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/water2.png',
-                          width: width(16),
-                          height: width(16),
-                        ),
-                        SizedBox(width: width(5)),
-                        Text(
-                          'Water',
-                          style: TextStyle(
-                            color: const Color(0xFFF1EED0),
-                            fontSize: width(12),
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                          SizedBox(height: width(5)),
+                        ],
+                      );
+                    },
+                  ),
+                )
               ],
             ),
           ),

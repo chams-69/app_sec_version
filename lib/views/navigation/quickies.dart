@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takwira_app/providers/quickies_tabbar.dart';
 import 'package:takwira_app/views/profile/profile.dart';
+import 'package:takwira_app/views/search.dart';
 
 class Quickies extends StatelessWidget {
   const Quickies({super.key});
@@ -58,7 +59,14 @@ class Quickies extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Search(),
+                      ),
+                    );
+                  },
                   icon: Image.asset('assets/images/search.png'),
                 ),
                 const SizedBox(width: 5),

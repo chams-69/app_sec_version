@@ -14,14 +14,15 @@ import 'package:takwira_app/views/navigation/fields.dart';
 import 'package:takwira_app/views/navigation/navigation.dart';
 import 'package:takwira_app/views/profile/profile.dart';
 import 'package:http/http.dart' as http;
+import 'package:takwira_app/views/search.dart';
 
 class MyActivities extends StatefulWidget {
   const MyActivities({super.key});
   @override
-    State<MyActivities> createState() => _MyActivitiesState();
+  State<MyActivities> createState() => _MyActivitiesState();
 }
 
-class _MyActivitiesState extends State<MyActivities>{
+class _MyActivitiesState extends State<MyActivities> {
   List<dynamic>? playedGames;
   List<dynamic>? upcomingGames;
   List<dynamic>? teams;
@@ -40,7 +41,8 @@ class _MyActivitiesState extends State<MyActivities>{
     var username = prefs.getString('username') ?? '';
     if (username.isNotEmpty) {
       try {
-        final response = await http.get(Uri.parse('https://takwira.me/api/activities?username=$username'));
+        final response = await http.get(
+            Uri.parse('https://takwira.me/api/activities?username=$username'));
         if (response.statusCode == 200) {
           final fieldsResponse = jsonDecode(response.body);
           setState(() {
@@ -51,7 +53,6 @@ class _MyActivitiesState extends State<MyActivities>{
             opponentTeams = fieldsResponse['opponentTeams'];
             joinableTeams = fieldsResponse['joinableTeams'];
             otherFields = fieldsResponse['otherFields'];
-
           });
         } else {
           print('Failed to fetch user data: ${response.statusCode}');
@@ -247,7 +248,14 @@ class _MyActivitiesState extends State<MyActivities>{
             Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Search(),
+                      ),
+                    );
+                  },
                   icon: Image.asset('assets/images/search.png'),
                 ),
                 const SizedBox(width: 5),
@@ -261,9 +269,13 @@ class _MyActivitiesState extends State<MyActivities>{
             Expanded(
               child: TabBarView(
                 children: [
-                  MyGames(upcomingGames : upcomingGames, playedGames : playedGames),
-                  MyFields(fields : fields , otherFields : otherFields),
-                  MyTeams(teams : teams, opponentTeams : opponentTeams , joinableTeams : joinableTeams),
+                  MyGames(
+                      upcomingGames: upcomingGames, playedGames: playedGames),
+                  MyFields(fields: fields, otherFields: otherFields),
+                  MyTeams(
+                      teams: teams,
+                      opponentTeams: opponentTeams,
+                      joinableTeams: joinableTeams),
                   MyLikedQuickies(),
                 ],
               ),

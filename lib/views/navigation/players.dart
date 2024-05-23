@@ -13,6 +13,7 @@ import 'package:takwira_app/views/playerProfile/player_profile.dart';
 import 'package:takwira_app/views/profile/profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:takwira_app/views/search.dart';
 
 class Players extends StatefulWidget {
   const Players({super.key});
@@ -201,7 +202,14 @@ class _PlayersState extends State<Players> {
                   icon: Image.asset('assets/images/top.png'),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Search(),
+                      ),
+                    );
+                  },
                   icon: Image.asset('assets/images/search.png'),
                 ),
                 const SizedBox(width: 5)
@@ -404,8 +412,8 @@ class _PlayersState extends State<Players> {
                 SizedBox(height: width(15)),
                 Column(
                   children: List.generate(
-                    playersData!.length,
-                    (columnIndex) => Consumer(
+                    (playersData!.length / 2).ceil(),
+                    (rowIndex) => Consumer(
                       builder: (context, ref, _) {
                         return Column(
                           children: [
@@ -413,152 +421,159 @@ class _PlayersState extends State<Players> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: List.generate(
                                 2,
-                                (rowIndex) {
-                                  final player = playersData![columnIndex];
-                                  final playerDatas = {
-                                    'username': player['username'],
-                                    'image': player['image'],
-                                  };
+                                (colIndex) {
+                                  int playerIndex = rowIndex * 2 + colIndex;
+                                  if (playerIndex < playersData!.length) {
+                                    final player = playersData![playerIndex];
+                                    final playerDatas = {
+                                      'username': player['username'],
+                                      'image': player['image'],
+                                    };
 
-                                  final followed = player['followers'];
-                                  var follow = true;
-                                  if (followed.contains(userid)) {
-                                    follow = false;
-                                  }
-                                  // final follow = ref.watch(
-                                  //     followProvidersMatrix![columnIndex]
-                                  //         [rowIndex]);
-                                  return Row(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                width(1.5), 0, 0, width(13)),
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PlayerProfile(
-                                                            playerData:
-                                                                playerDatas),
+                                    final followed = player['followers'];
+                                    var follow = true;
+                                    if (followed.contains(userid)) {
+                                      follow = false;
+                                    }
+                                    // final follow = ref.watch(
+                                    //     followProvidersMatrix![columnIndex]
+                                    //         [rowIndex]);
+                                    return Row(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  width(1.5), 0, 0, width(13)),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PlayerProfile(
+                                                              playerData:
+                                                                  playerDatas),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Ink(
+                                                    child: ProfileCard(
+                                                        gameDataS:
+                                                            playerDatas)),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: width(169.5),
+                                              child: InkWell(
+                                                onTap: () {},
+                                                child: Ink(
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/images/text.png',
+                                                        width: width(13.4),
+                                                        height: width(12.86),
+                                                      ),
+                                                      Text(
+                                                        'Message',
+                                                        style: TextStyle(
+                                                          color: const Color(
+                                                              0xFFF1EED0),
+                                                          fontSize: width(6),
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                );
-                                              },
-                                              child: Ink(
-                                                  child: ProfileCard(
-                                                      gameDataS: playerDatas)),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: width(169.5),
-                                            child: InkWell(
-                                              onTap: () {},
-                                              child: Ink(
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      'assets/images/text.png',
-                                                      width: width(13.4),
-                                                      height: width(12.86),
-                                                    ),
-                                                    Text(
-                                                      'Message',
-                                                      style: TextStyle(
-                                                        color: const Color(
-                                                            0xFFF1EED0),
-                                                        fontSize: width(6),
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                    ),
-                                                  ],
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            top: width(168),
-                                            right: width(2),
-                                            child: InkWell(
-                                              onTap: () {},
-                                              child: Ink(
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      'assets/images/invite.png',
-                                                      width: width(12.86),
-                                                      height: width(12.86),
-                                                    ),
-                                                    Text(
-                                                      'invite',
-                                                      style: TextStyle(
-                                                        color: const Color(
-                                                            0xFFF1EED0),
-                                                        fontSize: width(6),
-                                                        fontWeight:
-                                                            FontWeight.normal,
+                                            Positioned(
+                                              top: width(168),
+                                              right: width(2),
+                                              child: InkWell(
+                                                onTap: () {},
+                                                child: Ink(
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/images/invite.png',
+                                                        width: width(12.86),
+                                                        height: width(12.86),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        'invite',
+                                                        style: TextStyle(
+                                                          color: const Color(
+                                                              0xFFF1EED0),
+                                                          fontSize: width(6),
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            bottom: 0,
-                                            left: follow
-                                                ? width(61.8)
-                                                : width(57.4),
-                                            child: InkWell(
-                                              onTap: () {
-                                                follow
-                                                    ? addFollow(player['_id'])
-                                                    : removeFollow(
-                                                        player['_id']);
-                                                ref
-                                                    .read(
-                                                        followProvidersMatrix![
-                                                                    columnIndex]
-                                                                [rowIndex]
-                                                            .notifier)
-                                                    .followPressed();
-                                              },
-                                              child: Ink(
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      follow
-                                                          ? 'assets/images/follow.png'
-                                                          : 'assets/images/following.png',
-                                                      width: width(18),
-                                                      height: width(18),
-                                                    ),
-                                                    Text(
-                                                      follow
-                                                          ? 'Follow'
-                                                          : 'Following',
-                                                      style: TextStyle(
-                                                        color: follow
-                                                            ? const Color(
-                                                                0xFFF1EED0)
-                                                            : Color(0xFFAAA799),
-                                                        fontSize: width(6),
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                            Positioned(
+                                              bottom: 0,
+                                              left: follow
+                                                  ? width(61.8)
+                                                  : width(57.4),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  follow
+                                                      ? addFollow(player['_id'])
+                                                      : removeFollow(
+                                                          player['_id']);
+                                                  ref
+                                                      .read(followProvidersMatrix![
+                                                                  playerIndex]
+                                                              [rowIndex]
+                                                          .notifier)
+                                                      .followPressed();
+                                                },
+                                                child: Ink(
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        follow
+                                                            ? 'assets/images/follow.png'
+                                                            : 'assets/images/following.png',
+                                                        width: width(18),
+                                                        height: width(18),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        follow
+                                                            ? 'Follow'
+                                                            : 'Following',
+                                                        style: TextStyle(
+                                                          color: follow
+                                                              ? const Color(
+                                                                  0xFFF1EED0)
+                                                              : Color(
+                                                                  0xFFAAA799),
+                                                          fontSize: width(6),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    // If there are no more services, return an empty SizedBox
+                                    return SizedBox();
+                                  }
                                 },
                               ),
                             ),

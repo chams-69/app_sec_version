@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:takwira_app/data/field_data.dart';
 import 'package:takwira_app/providers/follow.dart';
+import 'package:takwira_app/views/messages/chat2.dart';
 
 final followProvider = StateNotifierProvider<Follow, bool>(((ref) {
   return Follow();
@@ -11,7 +12,8 @@ class FieldProfileHeader extends ConsumerWidget {
   final dynamic? field;
   final VoidCallback onBookNowPressed; // Callback function
 
-  const FieldProfileHeader({super.key, required this.onBookNowPressed, required this.field});
+  const FieldProfileHeader(
+      {super.key, required this.onBookNowPressed, required this.field});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,6 +65,7 @@ class FieldProfileHeader extends ConsumerWidget {
           left: width(146),
           child: Image.network(
             field['image'],
+            fit: BoxFit.cover,
             width: width(134),
             height: width(84),
           ),
@@ -72,7 +75,7 @@ class FieldProfileHeader extends ConsumerWidget {
             SizedBox(height: width(277)),
             Row(
               children: [
-                SizedBox(width: width(109)),
+                SizedBox(width: width(90)),
                 Column(
                   children: [
                     Text(
@@ -224,7 +227,14 @@ class FieldProfileHeader extends ConsumerWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: width(15), vertical: width(13)),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Chat2(),
+                          ),
+                        );
+                      },
                       child: Text(
                         'Contact US',
                         style: TextStyle(

@@ -143,7 +143,7 @@ class ForgotPassword extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const EmailVerifPass(),
+                                            EmailVerifPass(email: _email),
                                       ),
                                     );
                                   }

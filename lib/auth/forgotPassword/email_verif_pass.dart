@@ -4,7 +4,8 @@ import 'package:takwira_app/auth/emailVerif/count_down_timer.dart';
 import 'package:takwira_app/auth/forgotPassword/new_password.dart';
 
 class EmailVerifPass extends StatelessWidget {
-  const EmailVerifPass({super.key});
+  final dynamic? email;
+  const EmailVerifPass({super.key, this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +103,7 @@ class EmailVerifPass extends StatelessWidget {
                             color: Color(0xffF1EED0)),
                       ),
                       Text(
-                        'exemple*****@gmail.com',
+                        '${email}',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: width(16),

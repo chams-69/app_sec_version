@@ -17,6 +17,7 @@ import 'package:takwira_app/views/navigation/navigation.dart';
 import 'package:takwira_app/views/notifications/notifications.dart';
 import 'package:takwira_app/views/playerProfile/player_profile.dart';
 import 'package:takwira_app/views/profile/profile.dart';
+import 'package:takwira_app/views/search.dart';
 import 'package:takwira_app/views/teams/teams.dart';
 import 'package:http/http.dart' as http;
 import 'package:takwira_app/views/messages/messages.dart';
@@ -106,31 +107,26 @@ class _HomeState extends ConsumerState<Home> {
       print('Disconnected from server');
     });
 
-    socket.on('update-notif-count',(data){
+    socket.on('update-notif-count', (data) {
       setState(() {
         notificationsCount = data;
       });
     });
-    
   }
 
-  void setUserNotificationsCount()async{
+  void setUserNotificationsCount() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('id') ?? '';
     String? username = prefs.getString('username') ?? '';
     final currentUserDataResponse = await http.get(
       Uri.parse('https://takwira.me/api/currentuser?username=$username'),
-    ); 
+    );
 
     final currentUserData = jsonDecode(currentUserDataResponse.body);
     setState(() {
       notificationsCount = currentUserData['currentUser']['notifCount'];
     });
-
-    
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -164,8 +160,6 @@ class _HomeState extends ConsumerState<Home> {
     );
   }
 
-  
-
   Future<Map<String, List<dynamic>>> fetchData(
       AsyncValue<String> usernameAsyncValue) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -180,11 +174,11 @@ class _HomeState extends ConsumerState<Home> {
 
         final fieldsDataResponse = await http.get(
           Uri.parse('https://takwira.me/api/fields?username=$username'),
-        ); 
+        );
 
         final currentUserDataResponse = await http.get(
           Uri.parse('https://takwira.me/api/currentuser?username=$username'),
-        ); 
+        );
 
         if (response.statusCode == 200 &&
             fieldsDataResponse.statusCode == 200) {
@@ -231,7 +225,7 @@ class _HomeState extends ConsumerState<Home> {
         'users': [],
         'fieldsData': [],
         'id': [],
-        'currentUser' : []
+        'currentUser': []
       };
     }
   }
@@ -423,7 +417,14 @@ class _HomeState extends ConsumerState<Home> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Search(),
+                ),
+              );
+            },
             icon: Image.asset('assets/images/search.png'),
           ),
           Stack(
@@ -675,7 +676,7 @@ class _HomeState extends ConsumerState<Home> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.generate(
-                users!.length < 5 ?users!.length : 5 ,
+                users!.length < 5 ? users!.length : 5,
                 (index) =>
                     UserWidget(user: users[index], id: userid, socket: socket),
               ),
@@ -726,7 +727,9 @@ class _HomeState extends ConsumerState<Home> {
                 const SizedBox(width: 10),
                 Row(
                   children: List.generate(
-                    fieldsData!.length < 5 ?fieldsData!.length : fieldsData!.length ,
+                    fieldsData!.length < 5
+                        ? fieldsData!.length
+                        : fieldsData!.length,
                     (index) {
                       final fieldComp = fieldsData[index];
                       return Row(

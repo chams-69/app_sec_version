@@ -28,8 +28,6 @@ class CreateGame extends ConsumerStatefulWidget {
 class _CreateGameState extends ConsumerState<CreateGame> {
   int selectedField = -1;
 
-
-
   List<dynamic> found = [];
 
   @override
@@ -97,6 +95,22 @@ class _CreateGameState extends ConsumerState<CreateGame> {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2026),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Color(0xff599068),
+              onPrimary: Colors.white,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     ).then((value) {
       setState(() {
         date = value!;
@@ -105,9 +119,8 @@ class _CreateGameState extends ConsumerState<CreateGame> {
   }
 
   String? errorMessage;
-  
-  void createGame() async{
-    
+
+  void createGame() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var username = prefs.getString('username') ?? '';
     var token = prefs.getString('token') ?? '';
@@ -117,7 +130,7 @@ class _CreateGameState extends ConsumerState<CreateGame> {
       url,
       headers: {
         'flutter': 'true',
-        'authorization' : token,
+        'authorization': token,
       },
       body: {
         'joinedPlayers': jsonEncode(selectedPlayers),
@@ -132,7 +145,7 @@ class _CreateGameState extends ConsumerState<CreateGame> {
       var bodySuccess = responseBody['success'];
       if (bodySuccess) {
         var game = responseBody['game'];
-        setState((){
+        setState(() {
           errorMessage = "";
         });
         Navigator.push(
@@ -142,7 +155,7 @@ class _CreateGameState extends ConsumerState<CreateGame> {
           ),
         );
       } else {
-        setState((){
+        setState(() {
           errorMessage = "Your should pick a field and correct date";
         });
       }
@@ -197,10 +210,6 @@ class _CreateGameState extends ConsumerState<CreateGame> {
       return screenWidth * a;
     }
 
-    String date = 'dd mon yyyy, Today';
-    String time = '9:00 pm';
-    double price = 90;
-
     Widget selectedTab(String selected, {required bool isSelected}) {
       return Text(
         selected,
@@ -254,7 +263,7 @@ class _CreateGameState extends ConsumerState<CreateGame> {
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: [              
+            children: [
               SizedBox(height: width(21)),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: width(21)),
@@ -289,7 +298,7 @@ class _CreateGameState extends ConsumerState<CreateGame> {
                                 children: [
                                   Stack(
                                     children: [
-                                      FieldCard(field : field),
+                                      FieldCard(field: field),
                                       if (selectedField == index)
                                         Padding(
                                           padding:

@@ -9,6 +9,7 @@ import 'package:takwira_app/views/create/create_team.dart';
 import 'package:takwira_app/views/fieldProfile/field_profile.dart';
 import 'package:takwira_app/views/profile/profile.dart';
 import 'package:http/http.dart' as http;
+import 'package:takwira_app/views/search.dart';
 
 class Fields extends StatefulWidget {
   const Fields({super.key});
@@ -111,7 +112,14 @@ class _FieldsState extends State<Fields> {
                   icon: Image.asset('assets/images/calander.png'),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Search(),
+                      ),
+                    );
+                  },
                   icon: Image.asset('assets/images/search.png'),
                 ),
                 const SizedBox(width: 5),
